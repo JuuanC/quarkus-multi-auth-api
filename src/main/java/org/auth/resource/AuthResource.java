@@ -1,4 +1,4 @@
-package org.acme;
+package org.auth.resource;
 
 import jakarta.inject.Inject;
 import jakarta.ws.rs.GET;
@@ -9,9 +9,10 @@ import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.SecurityContext;
+import org.auth.service.GenerateToken;
 
 @Path("/security")
-public class ExampleResource {
+public class AuthResource {
 
    @Inject
    GenerateToken generateToken;

@@ -1,4 +1,4 @@
-package org.acme;
+package org.auth.security;
 
 import io.smallrye.jwt.auth.principal.JWTParser;
 import io.smallrye.jwt.auth.principal.ParseException;
