@@ -1,16 +1,40 @@
+quarkus:
+ log:
+  level: ALL
+
+ http:
+  port: ${PORT:8080}
+  root-path: /auth
+
+#Swagge
+ swagger-ui:
+  always-include: true
+  title: Multi Auth API
+  path: /swagger
+ smallrye-openapi:
+  info-title: Multi Auth API
+  info-version: 1.0.0
+  path: /open-api
+
+
+#Threads
+ thread-pool:
+  core-threads: ${MIN_THREADS_POOL:5}
+  max-threads: ${MAX_THREADS_POOL:20}
+  queue-size: ${QUEUE_THREADS_POOL:10}
+  keep-alive-time: ${KEEP_ALIVE_THREADS_POOL:30}
+
+#JWT
 mp:
  jwt:
   verify:
    publickey:
     location: publicKey.pem
-    algorithm: RS256
 
 smallrye:
  jwt:
-  verify:
-   key-format: PEM_KEY
+  sing:
+   key:
+    localtion: privateKey.pem
   require:
    named-principal: false
-quarkus:
- log:
-  level: ALL
