@@ -1,5 +1,6 @@
 package org.auth.security;
 
+import io.quarkus.logging.Log;
 import io.smallrye.jwt.auth.principal.JWTParser;
 import io.smallrye.jwt.auth.principal.ParseException;
 import jakarta.annotation.Priority;
@@ -8,8 +9,8 @@ import jakarta.inject.Inject;
 import jakarta.ws.rs.Priorities;
 import jakarta.ws.rs.container.ContainerRequestContext;
 import jakarta.ws.rs.container.ContainerRequestFilter;
-import jakarta.ws.rs.ext.Provider;
 import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.ext.Provider;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 import java.util.Base64;
@@ -40,7 +41,7 @@ public class SecurityFilter implements ContainerRequestFilter {
         String authHeader = requestContext.getHeaderString("Authorization");
 
         if (authHeader == null || authHeader.isEmpty()) {
-            //log.warn("No hay Header de Authorization.");
+            Log.warn("No hay Header de Authorization.");
             requestContext.abortWith(Response.status(Response.Status.UNAUTHORIZED).build());
             return;
         }
@@ -48,10 +49,10 @@ public class SecurityFilter implements ContainerRequestFilter {
         if (authHeader.startsWith("Bearer ")) {
             String token = authHeader.substring("Bearer".length()).trim();
             try {
-                jwtParser.parse(token); // Valida el token
-                //log.info("Token validado correctamente");
+                jwtParser.parse(token);
+                Log.info("Token validado correctamente");
             } catch (ParseException e) {
-                //log.warn("Token inválido: " + e.getMessage());
+                Log.warn("Token inválido: " + e.getMessage());
                 requestContext.abortWith(Response.status(Response.Status.UNAUTHORIZED).build());
             }
         } else if (authHeader.startsWith("Basic ")) {
@@ -59,11 +60,11 @@ public class SecurityFilter implements ContainerRequestFilter {
             String credentials = new String(Base64.getDecoder().decode(base64Credentials));
             String[] values = credentials.split(":", 2);
             if (values.length != 2 || !isValidUser(values[0], values[1])) {
-                //log.warn("Credenciales Basic inválidas");
+                Log.warn("Credenciales Basic inválidas");
                 requestContext.abortWith(Response.status(Response.Status.UNAUTHORIZED).build());
             }
         } else {
-            //log.warn("Tipo de autenticación no soportado");
+            Log.warn("Tipo de autenticación no soportado");
             requestContext.abortWith(Response.status(Response.Status.UNAUTHORIZED).build());
         }
     }

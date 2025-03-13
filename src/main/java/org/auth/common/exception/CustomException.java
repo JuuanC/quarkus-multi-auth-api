@@ -11,14 +11,27 @@ public class CustomException extends RuntimeException {
     private String uuid;
 
     public CustomException(String code, String message, String uuid) {
+        super(message);
         this.code = code;
-        this.message = message;
         this.uuid = uuid;
     }
 
     public CustomException(String code, String message, Object data, String uuid) {
+        super(message);
         this.code = code;
-        this.message = message;
+        this.data = data;
+        this.uuid = uuid;
+    }
+
+    public CustomException(String code, String message, String uuid, Exception e) {
+        super(message, e);
+        this.code = code;
+        this.uuid = uuid;
+    }
+
+    public CustomException(String code, String message, Object data, String uuid, Exception e) {
+        super(message, e);
+        this.code = code;
         this.data = data;
         this.uuid = uuid;
     }

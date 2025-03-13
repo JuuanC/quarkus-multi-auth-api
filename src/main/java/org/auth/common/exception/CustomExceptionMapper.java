@@ -3,7 +3,7 @@ package org.auth.common.exception;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.ext.ExceptionMapper;
 import jakarta.ws.rs.ext.Provider;
-import org.auth.common.dto.CustomResponse;
+import org.auth.common.dto.response.CustomResponse;
 
 import java.time.LocalDateTime;
 

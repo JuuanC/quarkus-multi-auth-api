@@ -16,7 +16,6 @@ quarkus:
   info-version: 1.0.0
   path: /open-api
 
-
 #Threads
  thread-pool:
   core-threads: ${MIN_THREADS_POOL:5}

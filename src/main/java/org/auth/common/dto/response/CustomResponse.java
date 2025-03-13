@@ -1,4 +1,4 @@
-package org.auth.common.dto;
+package org.auth.common.dto.response;
 
 import io.quarkus.runtime.annotations.RegisterForReflection;
 
