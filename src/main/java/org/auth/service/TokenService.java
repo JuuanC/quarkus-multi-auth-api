@@ -31,10 +31,11 @@ public class TokenService {
         return Uni.createFrom().item(Unchecked.supplier(() -> {
             try {
                 String token = Jwt
-                        .upn("Add email")
-                        .groups(new HashSet<>(Arrays.asList("Add rol")))
-                        .claim(Claims.birthdate.name(), "Add birthday")
-                        .subject("Add username")
+                        .subject(user.getUsername())
+                        .upn(user.getEmail())
+                        .claim(Claims.phone_number, user.getPhone())
+                        .claim(Claims.birthdate.name(), user.getBirthDate())
+                        .groups(new HashSet<>(Arrays.asList(user.getRole())))
                         .expiresAt(Instant.now().getEpochSecond() + timeExpires)
                         .sign();
                 return token;
@@ -50,14 +51,15 @@ public class TokenService {
             try {
                 JsonWebToken jwtOld = jwtParser.parse(token);
 
-                String token = Jwt
-                        .upn(jwtOld.getClaim(Claims.upn))
-                        .groups(jwtOld.getGroups())
-                        .claim(jwtOld.getClaim(Claims.birthdate))
+                String tokenNew = Jwt
                         .subject(jwtOld.getSubject())
+                        .upn(jwtOld.getClaim(Claims.upn))
+                        .claim(Claims.phone_number.name(), jwtOld.getClaim(Claims.phone_number))
+                        .claim(Claims.birthdate.name(), jwtOld.getClaim(Claims.birthdate))
+                        .groups(jwtOld.getGroups())
                         .expiresAt(Instant.now().getEpochSecond() + timeExpires)
                         .sign();
-                return token;
+                return tokenNew;
             } catch (ParseException e) {
                 Log.error("UUID: " + uuid + " ::: Error al hacer el Refresh Token ::: ", e);
                 throw new CustomException("", uuid, "", e);
