@@ -1,11 +1,15 @@
 package org.auth.persistence.entity;
 
 import io.quarkus.runtime.annotations.RegisterForReflection;
+import jakarta.persistence.*;
 
 import java.util.Objects;
 
 @RegisterForReflection
+@Entity
+@Table(name = "\"user\"")
 public class UserEntity {
+    @Id
     private String username;
     private String password;
     private String firstName;

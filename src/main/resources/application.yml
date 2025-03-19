@@ -1,39 +1,52 @@
 quarkus:
- log:
-  level: ALL
-
- http:
-  port: ${PORT:8080}
-  root-path: /auth
-
-#Swagge
- swagger-ui:
-  always-include: true
-  title: Multi Auth API
-  path: /swagger
- smallrye-openapi:
-  info-title: Multi Auth API
-  info-version: 1.0.0
-  path: /open-api
-
-#Threads
- thread-pool:
-  core-threads: ${MIN_THREADS_POOL:5}
-  max-threads: ${MAX_THREADS_POOL:20}
-  queue-size: ${QUEUE_THREADS_POOL:10}
-  keep-alive-time: ${KEEP_ALIVE_THREADS_POOL:30}
-
+  log: null
+  level: INFO
+  http:
+    port: ${PORT:8080}
+    root-path: /auth
+  #Swagge
+  swagger-ui:
+    always-include: true
+    title: Multi Auth API
+    path: /swagger
+  smallrye-openapi:
+    info-title: Multi Auth API
+    info-version: 1.0.0
+    path: /open-api
+  #Threads
+  thread-pool:
+    core-threads: ${MIN_THREADS_POOL:5}
+    max-threads: ${MAX_THREADS_POOL:20}
+    queue-size: ${QUEUE_THREADS_POOL:10}
+    keep-alive-time: ${KEEP_ALIVE_THREADS_POOL:30}
+  #Database
+  datasource:
+    db-kind: h2
+    jdbc:
+      url: jdbc:h2:mem:multi-auth
+      driver: org.h2.Driver
+    username: admin
+    password: 12345
+  hibernate-orm:
+    database:
+      generation: drop-and-create
+    log:
+      sql: false
 #JWT
 mp:
- jwt:
-  verify:
-   publickey:
-    location: publicKey.pem
-
+  jwt:
+    verify:
+      publickey:
+        location: publicKey.pem
 smallrye:
- jwt:
-  sing:
-   key:
-    localtion: privateKey.pem
-  require:
-   named-principal: false
+  jwt:
+    time-to-live: 300
+    sing:
+      key:
+        localtion: privateKey.pem
+    require:
+      named-principal: false
+#Basic auth
+basic-auth:
+  user: admin
+  password: admin

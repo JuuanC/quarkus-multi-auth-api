@@ -21,14 +21,14 @@ import java.util.Set;
 @ApplicationScoped
 public class SecurityFilter implements ContainerRequestFilter {
 
-    @ConfigProperty(name = "basic.auth.user")
+    @ConfigProperty(name = "basic-auth.user")
     String user;
-    @ConfigProperty(name = "basic.auth.password")
+    @ConfigProperty(name = "basic-auth.password")
     String password;
     @Inject
     JWTParser jwtParser;
 
-    private static final Set<String> EXCLUDED_PATHS = Set.of("", "");
+    private static final Set<String> EXCLUDED_PATHS = Set.of("");
 
     @Override
     public void filter(ContainerRequestContext requestContext) {
