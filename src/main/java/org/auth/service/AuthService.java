@@ -8,9 +8,11 @@ import org.auth.common.dto.response.LoginResponse;
 public class AuthService {
 
     private final TokenService tokenService;
+    private final UserService userService;
 
-    public AuthService(TokenService tokenService) {
+    public AuthService(TokenService tokenService, UserService userService) {
         this.tokenService = tokenService;
+        this.userService = userService;
     }
 
     public LoginResponse login(LoginRequest request, String traceId) {

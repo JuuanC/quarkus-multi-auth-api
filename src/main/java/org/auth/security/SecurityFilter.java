@@ -14,7 +14,7 @@ import jakarta.ws.rs.ext.Provider;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 import java.util.Base64;
-import java.util.Set;
+import java.util.Map;
 
 @Provider
 @Priority(Priorities.AUTHORIZATION)
@@ -28,13 +28,14 @@ public class SecurityFilter implements ContainerRequestFilter {
     @Inject
     JWTParser jwtParser;
 
-    private static final Set<String> EXCLUDED_PATHS = Set.of("/user");
+    private static final Map<String, String> EXCLUDED_PATHS =
+            Map.of("POST", "/user");
 
     @Override
     public void filter(ContainerRequestContext requestContext) {
         String path = requestContext.getUriInfo().getPath();
-
-        if (isExcludedPath(path)) {
+        String method = requestContext.getMethod();
+        if (isExcludedPath(method, path)) {
             return;
         }
 
@@ -69,8 +70,8 @@ public class SecurityFilter implements ContainerRequestFilter {
         }
     }
 
-    private boolean isExcludedPath(String path) {
-        return EXCLUDED_PATHS.contains(path);
+    private boolean isExcludedPath(String method, String path) {
+        return EXCLUDED_PATHS.containsKey(method) && EXCLUDED_PATHS.containsValue(path);
     }
 
     private boolean isValidUser(String username, String password) {
