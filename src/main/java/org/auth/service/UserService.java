@@ -7,6 +7,7 @@ import org.auth.persistence.entity.UserEntity;
 import org.auth.persistence.repository.UserRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 @ApplicationScoped
 public class UserService {
@@ -40,8 +41,11 @@ public class UserService {
         return userRepository.findAll().list();
     }
 
-    public UserEntity getByUsernameAndPassword(LoginRequest loginRequest, String traceId){
-        return userRepository.find("username and password", loginRequest.getUsername(), loginRequest.getPassword())
-                .firstResult();
+    public Optional<UserEntity> getByUsernameAndPassword(LoginRequest loginRequest, String traceId) {
+        return userRepository.find("username = ?1 and password = ?2",
+                        loginRequest.getUsername(),
+                        loginRequest.getPassword())
+                .singleResultOptional();
     }
+
 }

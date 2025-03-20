@@ -6,6 +6,8 @@ import org.auth.common.dto.response.LoginResponse;
 import org.auth.common.exception.CustomException;
 import org.auth.persistence.entity.UserEntity;
 
+import java.util.Optional;
+
 @ApplicationScoped
 public class AuthService {
 
@@ -18,9 +20,9 @@ public class AuthService {
     }
 
     public LoginResponse login(LoginRequest request, String traceId) {
-        UserEntity user = this.userService.getByUsernameAndPassword(request);
-        if(user != null) {
-            String token = this.tokenService.generate(user, traceId);
+        Optional<UserEntity> user = this.userService.getByUsernameAndPassword(request, traceId);
+        if(user.isPresent()) {
+            String token = this.tokenService.generate(user.orElse(null), traceId);
             return new LoginResponse();
         }else{
             throw new CustomException("001", "User not found", traceId);
