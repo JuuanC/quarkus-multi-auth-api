@@ -28,7 +28,7 @@ public class SecurityFilter implements ContainerRequestFilter {
     @Inject
     JWTParser jwtParser;
 
-    private static final Set<String> EXCLUDED_PATHS = Set.of("");
+    private static final Set<String> EXCLUDED_PATHS = Set.of("/user");
 
     @Override
     public void filter(ContainerRequestContext requestContext) {

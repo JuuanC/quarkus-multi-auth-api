@@ -7,7 +7,7 @@ import java.util.Objects;
 
 @RegisterForReflection
 @Entity
-@Table(name = "\"user\"")
+@Table(name = "\"user\"", schema = "public")
 public class UserEntity {
     @Id
     private String username;
