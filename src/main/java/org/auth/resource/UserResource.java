@@ -1,10 +1,10 @@
 package org.auth.resource;
 
 import jakarta.ws.rs.*;
+import jakarta.ws.rs.core.Response;
+import org.auth.common.utils.GenerateUUID;
 import org.auth.persistence.entity.UserEntity;
 import org.auth.service.UserService;
-
-import java.util.List;
 
 @Path("/user")
 public class UserResource {
@@ -16,29 +16,55 @@ public class UserResource {
     }
 
     @POST
-    public void save(UserEntity request) {
-        userService.save(request);
+    public Response save(UserEntity request, @HeaderParam("X-Request-ID") String requestId) {
+        // Si no se proporciona UUID, se genera uno nuevo
+        String traceId = GenerateUUID.generate(requestId);
+        userService.save(request, traceId);
+        return Response.ok()
+                .header("X-Request-ID", traceId)
+                .build();
     }
 
     @PUT
-    public void updateEmail(@QueryParam("username") String username, @QueryParam("email") String request) {
-        userService.updateEmail(username, request);
+    public Response updateEmail(@QueryParam("username") String username, @QueryParam("email") String request,
+                            @HeaderParam("X-Request-ID") String requestId) {
+        // Si no se proporciona UUID, se genera uno nuevo
+        String traceId = GenerateUUID.generate(requestId);
+        userService.updateEmail(username, request, traceId);
+        return Response.ok()
+                .header("X-Request-ID", traceId)
+                .build();
     }
 
     @DELETE
-    public void delete(@QueryParam("username") String request) {
-        userService.delete(request);
+    public Response delete(@QueryParam("username") String request,
+                       @HeaderParam("X-Request-ID") String requestId) {
+        // Si no se proporciona UUID, se genera uno nuevo
+        String traceId = GenerateUUID.generate(requestId);
+        userService.delete(request, traceId);
+        return Response.ok()
+                .header("X-Request-ID", traceId)
+                .build();
     }
 
     @GET
     @Path("/getById")
-    public UserEntity getById(@QueryParam("username") String request) {
-        return userService.getByUsername(request);
+    public Response getById(@QueryParam("username") String request,
+                              @HeaderParam("X-Request-ID") String requestId) {
+        // Si no se proporciona UUID, se genera uno nuevo
+        String traceId = GenerateUUID.generate(requestId);
+        return Response.ok(userService.getByUsername(request, traceId))
+                .header("X-Request-ID", traceId)
+                .build();
     }
 
     @GET
     @Path("/getAll")
-    public List<UserEntity> getAll() {
-        return userService.getAll();
+    public Response getAll(@HeaderParam("X-Request-ID") String requestId) {
+        // Si no se proporciona UUID, se genera uno nuevo
+        String traceId = GenerateUUID.generate(requestId);
+        return Response.ok(userService.getAll(traceId))
+                .header("X-Request-ID", traceId)
+                .build();
     }
 }

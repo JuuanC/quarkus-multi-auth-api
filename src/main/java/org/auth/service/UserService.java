@@ -2,6 +2,7 @@ package org.auth.service;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
+import org.auth.common.dto.request.LoginRequest;
 import org.auth.persistence.entity.UserEntity;
 import org.auth.persistence.repository.UserRepository;
 
@@ -17,25 +18,30 @@ public class UserService {
     }
 
     @Transactional
-    public void save(UserEntity user){
+    public void save(UserEntity user,String traceId){
         userRepository.persist(user);
     }
 
     @Transactional
-    public void updateEmail(String username,  String email){
+    public void updateEmail(String username,  String email, String traceId){
         userRepository.update("email = ?2 where username = ?1", username, email);
     }
 
     @Transactional
-    public void delete(String username){
+    public void delete(String username, String traceId){
         userRepository.delete("username", username);
     }
 
-    public UserEntity getByUsername(String username){
+    public UserEntity getByUsername(String username, String traceId){
         return userRepository.find("username", username).firstResult();
     }
 
-    public List<UserEntity> getAll(){
+    public List<UserEntity> getAll(String traceId){
         return userRepository.findAll().list();
+    }
+
+    public UserEntity getByUsernameAndPassword(LoginRequest loginRequest, String traceId){
+        return userRepository.find("username and password", loginRequest.getUsername(), loginRequest.getPassword())
+                .firstResult();
     }
 }

@@ -3,6 +3,8 @@ package org.auth.service;
 import jakarta.enterprise.context.ApplicationScoped;
 import org.auth.common.dto.request.LoginRequest;
 import org.auth.common.dto.response.LoginResponse;
+import org.auth.common.exception.CustomException;
+import org.auth.persistence.entity.UserEntity;
 
 @ApplicationScoped
 public class AuthService {
@@ -16,7 +18,14 @@ public class AuthService {
     }
 
     public LoginResponse login(LoginRequest request, String traceId) {
-        return new LoginResponse();
+        UserEntity user = this.userService.getByUsernameAndPassword(request);
+        if(user != null) {
+            String token = this.tokenService.generate(user, traceId);
+            return new LoginResponse();
+        }else{
+            throw new CustomException("001", "User not found", traceId);
+        }
+
     }
 
     public void logout(String username, String traceId) {
@@ -24,6 +33,7 @@ public class AuthService {
     }
 
     public LoginResponse refresh(String token, String traceId) {
+        String newToken = this.tokenService.refresh(token, traceId);
         return new LoginResponse();
     }
 }

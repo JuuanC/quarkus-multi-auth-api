@@ -7,6 +7,7 @@ import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.auth.common.dto.request.LoginRequest;
+import org.auth.common.utils.GenerateUUID;
 import org.auth.service.AuthService;
 
 import java.util.UUID;
@@ -25,9 +26,8 @@ public class AuthResource {
     @Produces(MediaType.TEXT_PLAIN)
     public Response login(LoginRequest loginRequest,
                           @HeaderParam("X-Request-ID") String requestId) {
-
         // Si no se proporciona UUID, se genera uno nuevo
-        String traceId = (requestId != null) ? requestId : UUID.randomUUID().toString();
+        String traceId = GenerateUUID.generate(requestId);
 
         authService.login(loginRequest, traceId);
         return Response.ok()
@@ -42,7 +42,7 @@ public class AuthResource {
                           @HeaderParam("X-Request-ID") String requestId) {
 
         // Si no se proporciona UUID, se genera uno nuevo
-        String traceId = (requestId != null) ? requestId : UUID.randomUUID().toString();
+        String traceId = GenerateUUID.generate(requestId);
 
         authService.logout(username, traceId);
         return Response.ok()
@@ -57,7 +57,7 @@ public class AuthResource {
                           @HeaderParam("X-Request-ID") String requestId) {
 
         // Si no se proporciona UUID, se genera uno nuevo
-        String traceId = (requestId != null) ? requestId : UUID.randomUUID().toString();
+        String traceId = GenerateUUID.generate(requestId);
 
         authService.refresh(token, traceId);
         return Response.ok()
